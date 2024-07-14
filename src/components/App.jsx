@@ -1,29 +1,19 @@
-import { useState, useEffect } from "react";
 import initialContacts from "../contacts.json";
+import { useState, useEffect } from "react";
 import ContactList from "../components/ContactList/ContactList";
 import ContactForm from "../components/ContactForm/ContactForm";
 import SearchBox from "../components/SearchBox/SearchBox";
 
 
 const App = () => {
-    const startedContacts =
-    JSON.parse(localStorage.getItem("contacts")) || initialContacts;
-
-    const [contacts, setContacts] = useState(startedContacts);
+    const [contacts, setContacts] = useState(() => {
+        const savedContacts = window.localStorage.getItem("contacts");
+        return savedContacts ? JSON.parse(savedContacts) : initialContacts;
+    });
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        const storedContacts = JSON.parse(localStorage.getItem("contacts"));
-        console.log(storedContacts);
-    if (storedContacts && storedContacts.length > 0) {
-        setContacts(storedContacts);
-    } else {
-        setContacts(initialContacts);
-    }
-    }, []);
-
-    useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+    window.localStorage.setItem("contacts", JSON.stringify(contacts));
     }, [contacts]);
 
 
